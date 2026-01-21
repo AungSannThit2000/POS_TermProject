@@ -65,4 +65,6 @@ This project was developed by the following team members:
  
 ```bash
 npm install
+npm install recharts
+npm install react-router-dom
 npm run dev

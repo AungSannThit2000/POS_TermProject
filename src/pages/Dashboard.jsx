@@ -7,8 +7,8 @@ import {
   ToggleButtonGroup,
   Card,
   CardContent,
+  Box
 } from "@mui/material";
- 
 import { loadTransactions } from "../lib/storage";
 import {
   sumAllTime,
@@ -88,15 +88,17 @@ export default function Dashboard() {
           />
 </CardContent>
 </Card>
- 
-      <Grid container spacing={2}>
-<Grid item xs={12} md={6}>
-<CategoryPieChart data={byCategory} />
-</Grid>
-<Grid item xs={12} md={6}>
-<TopItemsBarChart data={top5.map((x) => ({ name: x.name, revenue: x.revenue }))} />
-</Grid>
-</Grid>
+
+<Box sx={{ display: "flex", justifyContent: "center" }}>
+  <Grid container spacing={2} sx={{ maxWidth: 1100 }}>
+    <Grid item xs={12} md={6}>
+      <CategoryPieChart data={byCategory} />
+    </Grid>
+    <Grid item xs={12} md={6}>
+      <TopItemsBarChart data={top5.map((x) => ({ name: x.name, revenue: x.revenue }))} />
+    </Grid>
+  </Grid></Box>
+      
 </Stack>
   );
 }

@@ -12,7 +12,7 @@ export default function CategoryPieChart({ data }) {
             <PieChart>
               <Tooltip />
               <Legend />
-              <Pie data={data}dataKey="value"nameKey="name"outerRadius={110}label >
+              <Pie data={data}dataKey="value"nameKey="name"outerRadius={110} labelLine={false} >
                 {data.map((entry) => (
                   <Cell key={entry.name} fill={colorFromKey(entry.name)} />
                 ))}

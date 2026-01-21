@@ -54,10 +54,10 @@ This project was developed by the following team members:
 ## Screenshots
  
 ### Sales Journal Page
-<img width="1470" height="836" alt="Sales Journal" src="https://github.com/user-attachments/assets/9145aa99-c073-4315-b86d-f7842fa7596a" />
+![](src/images/SalesJournalPage.png)
  
 ### Dashboard Page
-<img width="1470" height="836" alt="Dashboard" src="https://github.com/user-attachments/assets/5073c3a1-63aa-4a5a-88b2-ce4734345e0b" />
+![](src/images/DashboardPage.png)
  
 ---
  

@@ -41,6 +41,7 @@ This project was developed by the following team members:
 - Support for custom categories
 - View and delete transaction records
 - Data persistence using Local Storage
+- Custom category
  
 ### Dashboard
 - Total sales of all time
@@ -68,7 +69,7 @@ The system features a fully responsive design with a live theme toggle, allowing
 | ![Trends Light](src/images/daily-sales-trend.png) | ![Trends Dark](src/images/daily-sales-trend(DarkMode).png) |
 | *Daily revenue fluctuations and growth patterns.* | *Optimized data visualization in dark theme.* |
 
-### 🍕 Category & Product Distribution
+### Category & Product Distribution
 | Light Mode | Dark Mode |
 |:---:|:---:|
 | ![Distribution Light](src/images/sales-distribution-analytics.png) | ![Distribution Dark](src/images/sales-distribution-analytics(DarkMode).png) |

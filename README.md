@@ -51,13 +51,34 @@ This project was developed by the following team members:
  
 ---
  
-## Screenshots
- 
-### Sales Journal Page
-![](src/images/SalesJournalPage.png)
- 
-### Dashboard Page
-![](src/images/DashboardPage.png)
+## Core Features
+
+## 🌓 Adaptive User Interface
+The system features a fully responsive design with a live theme toggle, allowing users to switch between Light and Dark modes for optimal visibility in any environment.
+
+### 📊 Comprehensive Dashboard
+| Light Mode | Dark Mode |
+|:---:|:---:|
+| ![Dashboard Light](src/images/dashboard-kpi-metrics.png) | ![Dashboard Dark](src/images/dashboard-dark-mode.png) |
+| *Clean high-contrast performance cockpit.* | *Reduced-glare interface for low-light settings.* |
+
+### 📈 Sales Trend Analytics
+| Light Mode | Dark Mode |
+|:---:|:---:|
+| ![Trends Light](src/images/daily-sales-trend.png) | ![Trends Dark](src/images/daily-sales-trend(DarkMode).png) |
+| *Daily revenue fluctuations and growth patterns.* | *Optimized data visualization in dark theme.* |
+
+### 🍕 Category & Product Distribution
+| Light Mode | Dark Mode |
+|:---:|:---:|
+| ![Distribution Light](src/images/sales-distribution-analytics.png) | ![Distribution Dark](src/images/sales-distribution-analytics(DarkMode).png) |
+| *Revenue split and top product rankings.* | *Dark mode analytics breakdown.* |
+
+### 📝 Sales Journal & Entry
+| Light Mode | Dark Mode |
+|:---:|:---:|
+| ![Journal Light](src/images/pos-sales-journal.png) | ![Journal Dark](src/images/pos-sales-journal(DarkMode).png) |
+| *Operational interface for transaction entry.* | *Dark mode transaction management.* |
  
 ---
  

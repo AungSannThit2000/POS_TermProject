@@ -1,7 +1,8 @@
-import { Card, CardContent, Typography } from "@mui/material";import { ResponsiveContainer, PieChart, Pie, Tooltip, Cell, Legend } from "recharts";import { colorFromKey } from "../../lib/chartColors";
+import { Card, CardContent, Typography, useTheme } from "@mui/material";import { ResponsiveContainer, PieChart, Pie, Tooltip, Cell, Legend } from "recharts";import { colorFromKey } from "../../lib/chartColors";
 export default function CategoryPieChart({ data }) {
+  const theme = useTheme();
   return (
-    <Card>
+    <Card variant="outlined">
       <CardContent>
         <Typography fontWeight={800} sx={{ mb: 1 }}>
           Sales proportion by category
@@ -12,9 +13,9 @@ export default function CategoryPieChart({ data }) {
             <PieChart>
               <Tooltip />
               <Legend />
-              <Pie data={data}dataKey="value"nameKey="name"outerRadius={110} labelLine={false} >
+              <Pie data={data} dataKey="value" nameKey="name" outerRadius="75%" labelLine={false}>
                 {data.map((entry) => (
-                  <Cell key={entry.name} fill={colorFromKey(entry.name)} />
+                  <Cell key={entry.name} fill={colorFromKey(entry.name)} stroke={theme.palette.background.paper} />
                 ))}
               </Pie>
             </PieChart>

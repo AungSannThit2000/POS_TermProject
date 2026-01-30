@@ -5,15 +5,13 @@ import {
   Typography,
   Grid,
   TextField,
-  Select,
-  MenuItem,
   Button,
   Stack,
-  FormControl,
-  InputLabel,
-  Checkbox,
-  FormControlLabel,
   Alert,
+  Autocomplete,
+  Divider,
+  Chip,
+  Box,
 } from "@mui/material";
 
 import products from "../data/products.json";
@@ -27,6 +25,29 @@ import TransactionsTable from "../components/TransactionsTable";
 
 const todayISO = () => new Date().toISOString().slice(0, 10);
 
+function SummaryRow({ label, value, highlight = false }) {
+  return (
+    <Box
+      sx={{
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        p: 1.25,
+        borderRadius: 1.5,
+        border: "1px dashed",
+        borderColor: (t) => t.palette.divider,
+        backgroundColor: (t) => (highlight ? t.palette.action.hover : "transparent"),
+        fontWeight: highlight ? 800 : 600,
+      }}
+    >
+      <Typography variant="body2" color="text.secondary">
+        {label}
+      </Typography>
+      <Typography fontWeight={highlight ? 900 : 700}>{value}</Typography>
+    </Box>
+  );
+}
+
 export default function SalesJournal() {
   const [transactions, setTransactions] = useState([]);
   const [extraCategories, setExtraCategories] = useState([]);
@@ -35,8 +56,11 @@ export default function SalesJournal() {
   const [quantity, setQuantity] = useState(1);
   const [date, setDate] = useState(todayISO());
 
-  const [useCustomCategory, setUseCustomCategory] = useState(false);
-  const [customCategory, setCustomCategory] = useState("");
+  const baseCategories = useMemo(
+    () => Array.from(new Set(products.map((p) => p.category))).filter(Boolean),
+    []
+  );
+  const [categoryInput, setCategoryInput] = useState(baseCategories[0] || "");
 
   const [error, setError] = useState("");
 
@@ -53,12 +77,22 @@ export default function SalesJournal() {
   );
 
   const unitPrice = Number(product?.unitPrice || 0);
-  const category =
-    useCustomCategory && customCategory ? customCategory.trim() : product?.category || "unknown";
+  const category = categoryInput?.trim() || product?.category || "unknown";
   const totalPrice = unitPrice * Number(quantity || 0);
 
+  const categoryOptions = useMemo(
+    () => Array.from(new Set([...baseCategories, ...extraCategories])).filter(Boolean),
+    [baseCategories, extraCategories]
+  );
+
+  useEffect(() => {
+    if (product?.category) {
+      setCategoryInput(product.category);
+    }
+  }, [productName]);
+
   function saveCategory() {
-    const next = customCategory.trim();
+    const next = category.trim();
     if (!next) return;
     if (extraCategories.includes(next)) return;
     setExtraCategories((prev) => [...prev, next]);
@@ -71,10 +105,7 @@ export default function SalesJournal() {
     if (!productName) return setError("Please select a product.");
     if (!date) return setError("Please select a date.");
     if (Number(quantity) < 1) return setError("Quantity must be at least 1.");
-
-    if (useCustomCategory && !customCategory.trim()) {
-      return setError("Custom category is empty.");
-    }
+    if (!category.trim()) return setError("Please choose or type a category.");
 
     const tx = {
       id: crypto.randomUUID(),
@@ -93,8 +124,7 @@ export default function SalesJournal() {
     });
 
     setQuantity(1);
-    setUseCustomCategory(false);
-    setCustomCategory("");
+    setCategoryInput(product?.category || baseCategories[0] || "");
   }
 
   return (
@@ -106,106 +136,106 @@ export default function SalesJournal() {
       {error && <Alert severity="error">{error}</Alert>}
 
       <Card>
-        <CardContent>
+        <CardContent sx={{ pb: 1 }}>
           <form onSubmit={addTransaction}>
-            <Grid container spacing={2}>
-              <Grid item xs={12} md={6}>
-                <FormControl fullWidth>
-                  <InputLabel>Product</InputLabel>
-                  <Select
-                    value={productName}
+            <Stack direction={{ xs: "column", md: "row" }} spacing={3}>
+              <Grid container spacing={2} flex={1}>
+                <Grid item xs={12}>
+                  <Typography variant="subtitle2" color="text.secondary" fontWeight={700}>
+                    Transaction details
+                  </Typography>
+                </Grid>
+
+                <Grid item xs={12} md={6}>
+                  <TextField
+                    select
                     label="Product"
+                    value={productName}
                     onChange={(e) => setProductName(e.target.value)}
+                    fullWidth
+                    SelectProps={{ native: true }}
                   >
                     {products.map((p) => (
-                      <MenuItem key={p.itemName} value={p.itemName}>
-                        {p.itemName} (฿{p.unitPrice})
-                      </MenuItem>
+                      <option key={p.itemName} value={p.itemName}>
+                        {p.itemName} (${p.unitPrice})
+                      </option>
                     ))}
-                  </Select>
-                </FormControl>
-              </Grid>
+                  </TextField>
+                </Grid>
 
-              <Grid item xs={6} md={3}>
-                <TextField
-                  type="number"
-                  label="Quantity"
-                  fullWidth
-                  value={quantity}
-                  onChange={(e) => {
-                    const raw = e.target.value;
-                    if (raw === "") return setQuantity("");
-                    const v = Number(raw);
-                    setQuantity(Number.isFinite(v) ? Math.max(1, v) : 1);
-                  }}
-                  inputProps={{ min: 1, step: 1 }}
-                />
-              </Grid>
+                <Grid item xs={6} md={3}>
+                  <TextField
+                    type="number"
+                    label="Quantity"
+                    fullWidth
+                    value={quantity}
+                    onChange={(e) => {
+                      const raw = e.target.value;
+                      if (raw === "") return setQuantity("");
+                      const v = Number(raw);
+                      setQuantity(Number.isFinite(v) ? Math.max(1, v) : 1);
+                    }}
+                    inputProps={{ min: 1, step: 1 }}
+                  />
+                </Grid>
 
-              <Grid item xs={6} md={3}>
-                <TextField
-                  type="date"
-                  label="Date"
-                  fullWidth
-                  value={date}
-                  onChange={(e) => setDate(e.target.value)}
-                  InputLabelProps={{ shrink: true }}
-                />
-              </Grid>
+                <Grid item xs={6} md={3}>
+                  <TextField
+                    type="date"
+                    label="Date"
+                    fullWidth
+                    value={date}
+                    onChange={(e) => setDate(e.target.value)}
+                    InputLabelProps={{ shrink: true }}
+                  />
+                </Grid>
 
-              <Grid item xs={12}>
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      checked={useCustomCategory}
-                      onChange={(e) => setUseCustomCategory(e.target.checked)}
-                    />
-                  }
-                  label="Use custom category"
-                />
-              </Grid>
+                <Grid item xs={12} md={6}>
+                  <Autocomplete
+                    freeSolo
+                    options={categoryOptions}
+                    value={categoryInput}
+                    onInputChange={(_, v) => setCategoryInput(v)}
+                    onChange={(_, v) => v && setCategoryInput(v)}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        label="Category"
+                        helperText={`Pick saved or type new • Saved: ${extraCategories.length}`}
+                      />
+                    )}
+                  />
+                </Grid>
 
-              {useCustomCategory && (
-                <>
-                  <Grid item xs={12} md={6}>
-                    <TextField
-                      label="Custom Category"
-                      value={customCategory}
-                      onChange={(e) => setCustomCategory(e.target.value)}
-                      fullWidth
-                      helperText={`Saved categories: ${extraCategories.length}`}
-                    />
-                  </Grid>
-
-                  <Grid item xs={12} md={6} alignSelf="center">
-                    <Button onClick={saveCategory} variant="outlined">
-                      Save Category
+                <Grid item xs={12} md={6}>
+                  <Stack direction="row" spacing={1} alignItems="center" sx={{ height: "100%" }}>
+                    <Button variant="outlined" onClick={saveCategory}>
+                      Save category
                     </Button>
-                  </Grid>
-                </>
-              )}
-
-              <Grid item xs={12} md={4}>
-                <Typography variant="body2">Unit Price</Typography>
-                <Typography fontWeight={700}>฿{unitPrice}</Typography>
+                    <Chip
+                      label={category || "No category yet"}
+                      color="primary"
+                      variant="outlined"
+                      sx={{ borderStyle: "dashed" }}
+                    />
+                  </Stack>
+                </Grid>
               </Grid>
 
-              <Grid item xs={12} md={4}>
-                <Typography variant="body2">Category</Typography>
-                <Typography fontWeight={700}>{category}</Typography>
-              </Grid>
+              <Divider orientation="vertical" flexItem sx={{ display: { xs: "none", md: "block" } }} />
 
-              <Grid item xs={12} md={4}>
-                <Typography variant="body2">Total Price</Typography>
-                <Typography fontWeight={700}>฿{totalPrice}</Typography>
-              </Grid>
-
-              <Grid item xs={12}>
+              <Stack spacing={1.2} minWidth={{ md: 240 }}>
+                <Typography variant="subtitle2" color="text.secondary" fontWeight={700}>
+                  Quick summary
+                </Typography>
+                <SummaryRow label="Unit price" value={`$${unitPrice.toFixed(2)}`} />
+                <SummaryRow label="Category" value={category || "—"} />
+                <SummaryRow label="Total" value={`$${totalPrice.toFixed(2)}`} highlight />
                 <Button type="submit" variant="contained" size="large">
                   Add Transaction
                 </Button>
-              </Grid>
-            </Grid>
+              </Stack>
+            </Stack>
           </form>
         </CardContent>
       </Card>

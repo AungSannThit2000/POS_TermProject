@@ -9,13 +9,13 @@ It allows users to record sales transactions and view summarized sales data thro
  
 This project was developed by the following team members:
  
-- **May Thu Chit**  
+- **May Thu Chit (6715141)**  
   GitHub: [MThuChit](https://github.com/MThuChit)
  
-- **Aung Sann Thit**  
+- **Aung Sann Thit(6712111)**  
   GitHub: [AungSannThit2000](https://github.com/AungSannThit2000)
  
-- **Aung Chan Myint**  
+- **Aung Chan Myint (6715111)**  
   GitHub: [Gebu19](https://github.com/Gebu19)
  
 ---
